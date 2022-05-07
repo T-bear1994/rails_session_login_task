@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <html>
   <head>
-    <title>CdpWebRailsSessionLoginTask</title>
+    <title>RailsSessionLoginTask</title>
     <%= csrf_meta_tags %>
     <%= csp_meta_tag %>
 
@@ -10,7 +10,22 @@
   </head>
 
   <body>
-    <p id="notice"><%= notice %></p>
+    <% if logged_in? %>
+      <ul>
+        <li id="tasks-index"><%= link_to "タスク一覧", tasks_path %></li>
+        <li id="new-task"><%= link_to "タスクを登録する", new_task_path %></li>
+        <li id="my-account"><%= link_to "アカウント", user_path(current_user.id) %></li>
+        <li id="sign-out"><%= link_to "ログアウト", session_path(current_user.id), method: :delete %></li>
+      </ul>
+    <% else %>
+      <ul>
+        <li id="sign-up"><%= link_to "アカウント登録", new_user_path %></li>
+        <li id="sign-in"><%= link_to "ログイン", new_session_path %></li>
+      </ul>
+    <% end %>
+    <% flash.each do |key, value| %>
+      <%= content_tag(:div, value, class: "#{key}") %>
+    <% end %>
     <%= yield %>
   </body>
 </html>
