@@ -8,9 +8,10 @@ class SessionsController < ApplicationController
     user = User.find_by(email: params[:session][:email].downcase)
     if user&.authenticate(params[:session][:password])
       log_in(user)
-      redirect_to tasks_path
+      redirect_to tasks_path, flash: {success: 'ログインしました'}
     else
-      flash.now[:danger] = "メールアドレスまたはパスワードに誤りがあります"
+      flash[:notice] = 'メールアドレスまたはパスワードに誤りがあります'
+      render :new
     end
   end
 
