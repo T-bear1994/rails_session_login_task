@@ -1,10 +1,10 @@
 class TasksController < ApplicationController
   before_action :set_task, only: %i[ show edit update destroy ]
   skip_before_action :correct_user, only: [:show]
-  before_action :current_user, only: %i[ create ]
+  before_action :current_user, only: %i[ create index ]
 
   def index
-    @tasks = Task.all
+    @tasks = Task.where(user_id: @current_user.id)
   end
 
   def new
