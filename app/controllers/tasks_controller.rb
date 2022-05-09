@@ -1,6 +1,7 @@
 class TasksController < ApplicationController
   before_action :set_task, only: %i[ show edit update destroy ]
   skip_before_action :correct_user, only: [:show]
+  before_action :current_user, only: %i[ create ]
 
   def index
     @tasks = Task.all
@@ -12,8 +13,9 @@ class TasksController < ApplicationController
 
   def create
     @task = Task.new(task_params)
+    @task.user_id = @current_user.id
     if @task.save
-      redirect_to tasks_path, notice: t('.created')
+      redirect_to tasks_path, flash: {success: 'タスクを登録しました'}
     else
       render :new
     end
